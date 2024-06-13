@@ -568,3 +568,84 @@ class Agent extends CI_Controller {
     }
 
 }
+
+public function webhook() {
+    $method = $_SERVER['REQUEST_METHOD'];
+    if ($method == 'POST') {
+        $requestBody = file_get_contents('php://input');
+        $json = json_decode($requestBody);
+
+        $text = $json->queryResult->queryText;
+        $session = $json->session;
+
+        // Retrieve Facebook sender ID (if applicable)
+        $source = $json->originalDetectIntentRequest->source ?? '';
+        $senderId = '';
+        if ($source == 'facebook') {
+            $senderId = $json->originalDetectIntentRequest->payload->data->sender->id;
+        }
+
+        // Process the incoming message and create a response
+        switch ($text) {
+            case 'สอบถาม':
+                $speech = "Hi, Nice to meet you";
+                break;
+            case 'bye':
+                $speech = "Bye, good night";
+                break;
+            case 'anything':
+                $speech = "Yes, you can type anything here.";
+                break;
+            default:
+                $speech = "Sorry, I didn't get that. Please ask me something else.";
+                break;
+        }
+
+        // Prepare the response to Dialogflow
+        $response = new \stdClass();
+        $response->fulfillmentText = $speech;
+
+        // Save the chat interaction to MySQL database
+        $this->saveToDatabase($session, $text, $speech);
+
+        // If the message is from Facebook, send a response back to Facebook Messenger
+        if ($source == 'facebook' && !empty($senderId)) {
+            $this->sendFacebookResponse($senderId, $speech);
+        }
+
+        echo json_encode($response);
+    } else {
+        echo "Method not allowed";
+    }
+}
+
+// Helper function to save chat to the database
+private function saveToDatabase($session, $userMessage, $botResponse) {
+    $data = array(
+        'session_id' => $session,
+        'user_message' => $userMessage,
+        'bot_response' => $botResponse,
+        'timestamp' => date('Y-m-d H:i:s')
+    );
+    $this->db->insert('chat_logs', $data);
+}
+
+// Helper function to send response to Facebook Messenger
+private function sendFacebookResponse($senderId, $message) {
+    $accessToken = 'YOUR_FACEBOOK_PAGE_ACCESS_TOKEN';
+    $url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' . $accessToken;
+
+    $jsonData = [
+        'recipient' => ['id' => $senderId],
+        'message' => ['text' => $message]
+    ];
+
+    $jsonDataEncoded = json_encode($jsonData);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_exec($ch);
+    curl_close($ch);
+}
