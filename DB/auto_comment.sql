@@ -136,3 +136,13 @@ CREATE TABLE `autoposting` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `autoposting`
+--
+
+LOCK TABLES `autoposting` WRITE;
+/*!40000 ALTER TABLE `autoposting` DISABLE KEYS */;
+/*!40000 ALTER TABLE `autoposting` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- 
