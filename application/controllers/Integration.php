@@ -47,7 +47,11 @@ class Integration extends Home
 		$data['email_autoresponder_apis'] = $this->get_autoresponders();
 		$data['social_medias'] = $this->get_social_medias();
 		$data['payment_apis'] = $this->get_payment_apis();
-		$data['sms_email_apis'] = $this->get_sms_email();
+		$data['sms_email_apis'] = $this->get_ai_email();
+		$data['get_ai_apis'] = $this->get_ai_apis();
+
+
+
 
 		$this->_viewcontroller($data);
 
