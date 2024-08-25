@@ -78,14 +78,28 @@ class Integration extends Home
 				'action_url'=> base_url('email_auto_responder_integration/activecampaign_list'),
 			],
 			'4'=>[
-				'title'=>$this->lang->line('Acelle'),
-				'img_path' =>$asset_path_common.'auto_responder/acelle.png',
-				'action_url'=> base_url('email_auto_responder_integration/acelle_list'),
+				'title'=>$this->lang->line('Openai'),
+				'img_path' =>$asset_path_common.'auto_responder/openai.png',
+				'action_url'=> base_url('email_auto_responder_integration/openai_list'),
+			],
+'5'=>[
+				'title'=>$this->lang->line('Gimini'),
+				'img_path' =>$asset_path_common.'auto_responder/gimini.png',
+				'action_url'=> base_url('email_auto_responder_integration/gimini_list'),
 			],
 
 		];
 		
 	}
+
+
+
+
+
+
+
+
+
 
 	public function get_social_medias()
 	{
@@ -127,18 +141,18 @@ class Integration extends Home
 				'has_access'=> $has_twitter_access,
 			],
 			'2'=>[
-				'title'=>$this->lang->line('LinkedIn'),
+				'title'=>$this->lang->line('Whatapp'),
 				'img_path' =>$asset_path_common.'social_media/linkedin.png',
-				'action_url'=> base_url('social_apps/linkedin_settings'),
+				'action_url'=> base_url('social_apps/whatapp_settings'),
 				'account_import_url' => base_url('comboposter/social_accounts'),
-				'has_access'=> $has_linkedin_access,
+				'has_access'=> $has_whatapp_access,
 			],
 			'3'=>[
-				'title'=>$this->lang->line('Medium'),
-				'img_path' =>$asset_path_common.'social_media/medium.png',
+				'title'=>$this->lang->line('Line'),
+				'img_path' =>$asset_path_common.'social_media/line.png',
 				'action_url'=> '',
 				'account_import_url' => base_url('comboposter/social_accounts'),
-				'has_access'=> $has_medium_access,
+				'has_access'=> $has_line_access,
 			],
 			'4'=>[
 				'title'=>$this->lang->line('Blogger'),
